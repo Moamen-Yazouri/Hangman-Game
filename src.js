@@ -55,8 +55,23 @@ let randomCatWordsKeys = Math.floor(Math.random() * randomCatWords.length);
 // Get the Chosen Word
 let chosenWord = randomCatWords[randomCatWordsKeys];
 
-let arrayOfChars = Array.from(chosenWord);
+let arrayOfChars = Array.from(chosenWord.toLowerCase());
 let lettersContainer = document.querySelector(".letter-guess");
+// Get The draw parts.
+let drawContainer = document.querySelector(".hang-draw");
+let draw = document.querySelector(".draw");
+let stand = document.querySelector(".stand");
+let hang = document.querySelector(".hang");
+let rope = document.querySelector(".rope");
+let man = document.querySelector(".man");
+let drawArray = [draw, stand, hang, rope, man];
+let counter = 0;
+let successCounter = 0;
+
+if (chosenWord.includes(" ")) {
+  successCounter++;
+}
+
 arrayOfChars.forEach((char) => {
   let span = document.createElement("span");
 
@@ -68,6 +83,7 @@ arrayOfChars.forEach((char) => {
 });
 
 document.addEventListener("click", (e) => {
+  let attempt = false;
 
   if(e.target.className === "letter-box") {
 
@@ -77,16 +93,92 @@ document.addEventListener("click", (e) => {
   let clickedLetter = e.target.innerHTML.toLowerCase();
 
   arrayOfChars.forEach((letter, index) => {
+
     if(clickedLetter == letter){
+      attempt = true;
+      successCounter++;
+      if(index === 0 && randomCat !== "programming") {
+        lettersContainer.children[index].innerHTML = letter.toUpperCase();
+      }
 
-      lettersContainer.children[index].innerHTML = letter;
-
+      else {
+        lettersContainer.children[index].innerHTML = letter;
+      }
     }
-    else {
-      
-    }
-  })
 
+  });
+
+  if(attempt == false && counter < 5) {
+
+    if(e.target.classList.contains("clicked")) {
+
+      drawArray[counter++].style.display = "block";
+     
+    }
+    
+  }
+
+  if(counter == 5) {
+    setTimeout(() => {
+      letters.classList.add("finished");
+      let finish = document.createElement("div");
+      finish.textContent = `Failed, The word is: ${chosenWord}`;
+      finish.style.cssText = 
+      `position: fixed;
+        background-color: #009688;
+        padding: 100px 20px;
+        width: 80%;
+        top: 10%;
+        left: 10%;
+        text-align: center;
+        font-size: 40px;
+        border: 1px solid #CCC;
+        color: #FFF;
+      `;
+      let replay = document.createElement("button");
+      replay.textContent = "Play-Again";
+      replay.style.cssText = 
+      `
+      padding: 10px 20px;
+      background-color: brown;
+      display: block;
+      margin: 20px auto 0px;
+      color: black;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+     `;
+      // Add hover effect on mouseover
+    replay.addEventListener('mouseover', function() {
+      replay.style.backgroundColor = '#D2B48C';
+      replay.style.transform = 'scale(1.05)';
+    });
+
+    // Remove hover effect on mouseout
+    replay.addEventListener('mouseout', function() {
+      replay.style.backgroundColor = `brown`;
+      replay.style.transform = 'scale(1)';
+    });
+
+    // Repeat the game on click
+    replay.addEventListener("click", () => {
+      window.location.reload(true);
+    });
+
+      finish.appendChild(replay)
+      document.body.appendChild(finish);
+    
+    }, 500)
+  }
+  if(successCounter === chosenWord.length) {
+
+    window.location.reload(true);
+    
+  };
+  console.log(successCounter);
+  console.log(chosenWord.length);
 });
 
 
