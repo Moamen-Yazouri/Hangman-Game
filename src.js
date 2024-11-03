@@ -54,7 +54,7 @@ let randomCatWordsKeys = Math.floor(Math.random() * randomCatWords.length);
 
 // Get the Chosen Word
 let chosenWord = randomCatWords[randomCatWordsKeys];
-
+// Get an array of the word chars
 let arrayOfChars = Array.from(chosenWord.toLowerCase());
 let lettersContainer = document.querySelector(".letter-guess");
 // Get The draw parts.
@@ -177,8 +177,6 @@ document.addEventListener("click", (e) => {
     window.location.reload(true);
     
   };
-  console.log(successCounter);
-  console.log(chosenWord.length);
 });
 
 
